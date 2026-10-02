@@ -4,7 +4,7 @@
 postgres:
   external:
     enabled: true
-    host: "192.195.237.12"
+    host: "<ip-do-servidor-postgres>"
   secrets:
     postgres-user: "rodou"
     postgres-password: "<senha-do-usuario-rodou-no-postgres>"
@@ -18,11 +18,28 @@ gitRsync:
   secret:
     name: "git-token-secret"   # Secret com chave "token" contendo o GitHub token
     key: token
+  persistence:
+    storageClassName: "<storage-class-do-cluster>"
 
 airflow:
   apiServer:
     service:
       type: LoadBalancer   # expõe o Airflow via IP externo no VKS
+
+  pvc:
+    storageClassName: "<storage-class-do-cluster>"
+
+  # fsGroup: 0 necessário para o usuário airflow (gid 0) escrever nos PVCs vSphere RWO
+  podSecurityContext:
+    fsGroup: 0
+
+  # PVCs são RWO — todos os pods Airflow precisam estar no mesmo nó
+  nodeSelector:
+    kubernetes.io/hostname: "<nome-do-no-onde-os-pvcs-estao-montados>"
+
+  config:
+    AIRFLOW__API__BASE_URL: "http://<ip-externo-do-airflow>:8080"
+    AIRFLOW__WEBSERVER__BASE_URL: "http://<ip-externo-do-airflow>:8080"
 
   secrets:
     AIRFLOW__CORE__FERNET_KEY: "<gere com: python3 -c \"from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())\">"
@@ -30,14 +47,14 @@ airflow:
     AIRFLOW__API__SECRET_KEY: "<string aleatória longa>"
     _AIRFLOW_WWW_USER_USERNAME: "admin"
     _AIRFLOW_WWW_USER_PASSWORD: "<senha-forte>"
-    AIRFLOW__SMTP__SMTP_HOST: "<host-smtp>"
-    AIRFLOW__SMTP__SMTP_MAIL_FROM: "rodou@socioambiental.org"
+    AIRFLOW__SMTP__SMTP_HOST: "smtp.mandrillapp.com"
+    AIRFLOW__SMTP__SMTP_MAIL_FROM: "ISA-BOT DIÁRIO OFICIAL <bot-dou@socioambiental.org>"
     AIRFLOW__SMTP__SMTP_PORT: "587"
     AIRFLOW__SMTP__SMTP_STARTTLS: "true"
-    AIRFLOW__SMTP__SMTP_USER: "<usuario-smtp>"
-    AIRFLOW__SMTP__SMTP_PASSWORD: "<senha-smtp>"
+    AIRFLOW__SMTP__SMTP_USER: "<email-conta-mandrill>"
+    AIRFLOW__SMTP__SMTP_PASSWORD: "<api-key-mandrill>"
     INLABS_PORTAL_LOGIN: "<login-inlabs>"
     INLABS_PORTAL_PASSWORD: "<senha-inlabs>"
 
 smtp4dev:
-  enabled: false   # desligado pois usamos SMTP real
+  enabled: false   # desligado pois usamos SMTP real (Mandrill)
