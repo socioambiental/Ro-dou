@@ -17,6 +17,22 @@ spec:
         app: airflow-dag-processor
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      {{- with .Values.airflow.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.airflow.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: airflow-scheduler
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+              topologyKey: kubernetes.io/hostname
       containers:
         - name: airflow-dag-processor
           image: {{ .Values.airflow.image.repository }}:{{ .Values.airflow.image.tag }}

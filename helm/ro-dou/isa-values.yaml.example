@@ -1,0 +1,43 @@
+# Exemplo de values para a instalação ISA.
+# Copie para isa-values.yaml, preencha os valores e NUNCA versione esse arquivo.
+
+postgres:
+  external:
+    enabled: true
+    host: "192.195.237.12"
+  secrets:
+    postgres-user: "rodou"
+    postgres-password: "<senha-do-usuario-rodou-no-postgres>"
+    postgres-db: "rodou"
+
+gitRsync:
+  enabled: true
+  repository: "https://github.com/socioambiental/dags-rodou"
+  branch: main
+  sourceDir: ""          # subpasta do repo, ou vazio para sincronizar a raiz
+  secret:
+    name: "git-token-secret"   # Secret com chave "token" contendo o GitHub token
+    key: token
+
+airflow:
+  apiServer:
+    service:
+      type: LoadBalancer   # expõe o Airflow via IP externo no VKS
+
+  secrets:
+    AIRFLOW__CORE__FERNET_KEY: "<gere com: python3 -c \"from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())\">"
+    AIRFLOW__API_AUTH__JWT_SECRET: "<string aleatória longa>"
+    AIRFLOW__API__SECRET_KEY: "<string aleatória longa>"
+    _AIRFLOW_WWW_USER_USERNAME: "admin"
+    _AIRFLOW_WWW_USER_PASSWORD: "<senha-forte>"
+    AIRFLOW__SMTP__SMTP_HOST: "<host-smtp>"
+    AIRFLOW__SMTP__SMTP_MAIL_FROM: "rodou@socioambiental.org"
+    AIRFLOW__SMTP__SMTP_PORT: "587"
+    AIRFLOW__SMTP__SMTP_STARTTLS: "true"
+    AIRFLOW__SMTP__SMTP_USER: "<usuario-smtp>"
+    AIRFLOW__SMTP__SMTP_PASSWORD: "<senha-smtp>"
+    INLABS_PORTAL_LOGIN: "<login-inlabs>"
+    INLABS_PORTAL_PASSWORD: "<senha-inlabs>"
+
+smtp4dev:
+  enabled: false   # desligado pois usamos SMTP real

@@ -69,6 +69,14 @@ airflow:
   pvc:
     storage: 1Gi
     storageClassName: ""
+  # Security context applied to all Airflow pods (scheduler, api-server, dag-processor).
+  # fsGroup: 0 is required when using vSphere RWO PVCs so the airflow user (gid 0)
+  # can write to the mounted volume.
+  podSecurityContext:
+    fsGroup: 0
+  # Node selector applied to all Airflow pods. Useful when PVCs use ReadWriteOnce
+  # (only one node can mount at a time) — pin all pods to the same node.
+  nodeSelector: {}
 
 # Synchronize DAG configuration files from Git (optional)
 gitRsync:
@@ -106,6 +114,12 @@ gitRsync:
 
 # PostgreSQL configuration
 postgres:
+  # Set external.enabled=true to use an existing PostgreSQL server instead of
+  # deploying one in-cluster. When enabled, the StatefulSet is not created and
+  # all connection strings point to external.host.
+  external:
+    enabled: false
+    host: ""
   image:
     repository: postgres
     tag: "15"

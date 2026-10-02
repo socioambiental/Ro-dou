@@ -1,3 +1,4 @@
+{{- $pgHost := ternary .Values.postgres.external.host (printf "%s-postgres" (include "ro-dou.fullname" .)) .Values.postgres.external.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -24,12 +25,12 @@ spec:
         command: ["bash", "-c"]
         args:
           - |
-            until pg_isready -h {{ include "ro-dou.fullname" . }}-postgres -U {{ index .Values.postgres.secrets "postgres-user" }} -d postgres; do
+            until pg_isready -h {{ $pgHost }} -U {{ index .Values.postgres.secrets "postgres-user" }} -d postgres; do
               echo "Waiting for PostgreSQL to be ready..."
               sleep 2
             done
             echo "PostgreSQL is ready. Running init script..."
-            psql -h {{ include "ro-dou.fullname" . }}-postgres -U {{ index .Values.postgres.secrets "postgres-user" }} -d postgres -f /init/init.sql
+            psql -h {{ $pgHost }} -U {{ index .Values.postgres.secrets "postgres-user" }} -d postgres -f /init/init.sql
         env:
           - name: PGPASSWORD
             valueFrom:

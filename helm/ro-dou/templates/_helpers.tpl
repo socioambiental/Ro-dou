@@ -63,7 +63,8 @@ Hooks only guarantee Postgres has been created, not that it is ready, so jobs th
 talk to it must wait themselves.
 */}}
 {{- define "ro-dou.waitForPostgres" -}}
-until (exec 3<>/dev/tcp/{{ include "ro-dou.fullname" . }}-postgres/{{ .Values.postgres.service.port }}) 2>/dev/null; do
+{{- $pgHost := ternary .Values.postgres.external.host (printf "%s-postgres" (include "ro-dou.fullname" .)) .Values.postgres.external.enabled }}
+until (exec 3<>/dev/tcp/{{ $pgHost }}/{{ .Values.postgres.service.port }}) 2>/dev/null; do
   echo "Waiting for PostgreSQL to be reachable..."
   sleep 3
 done
