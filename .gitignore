@@ -145,4 +145,5 @@ test_notrack/
 #helm local values
 values-local.yaml
 
-docs/CODEBASE_MAP.mdhelm/ro-dou/isa-values.yaml
+docs/CODEBASE_MAP.md
+helm/ro-dou/isa-values.yaml

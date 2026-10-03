@@ -136,6 +136,12 @@ def load_inlabs():
             ]
             logging.info("Files found: %s", files)
             if not files:
+                # O DOU não tem edição normal aos sábados e domingos (só extras, de vez em
+                # quando). Nesses dias, "sem arquivos" não é erro: devolve a lista vazia e o
+                # short_circuit pula as tarefas seguintes. Em dia útil continua sendo erro.
+                if datetime.strptime(reference_date, "%Y-%m-%d").weekday() >= 5:
+                    logging.info("Sem arquivos em %s (fim de semana): nada a carregar.", reference_date)
+                    return []
                 raise ValueError("No files found for this date: %s" % reference_date)
             return files
 
@@ -149,7 +155,7 @@ def load_inlabs():
             files = _find_files(session, headers)
 
             if not files:
-                logging.error("Files not found for date %s", reference_date)
+                logging.info("Files not found for date %s", reference_date)
                 return False
 
             for file in files:
