@@ -89,6 +89,18 @@ spec:
             app.kubernetes.io/instance: {{ .Release.Name }}
         spec:
           restartPolicy: OnFailure
+          {{- with .Values.airflow.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app: airflow-scheduler
+                      app.kubernetes.io/instance: {{ .Release.Name }}
+                  topologyKey: kubernetes.io/hostname
           containers:
             - name: git-rsync
               image: {{ printf "%s:%s" .Values.gitRsync.image.repository .Values.gitRsync.image.tag | quote }}
