@@ -4,53 +4,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Falha detectada - Airflow</title>
-
+    <title>Falha detectada — Airflow</title>
     <style>
+        /* =============================================
+         * Ro-DOU · Template de falha
+         * Paleta: --red #9b1c1c | --blue #1355d9
+         *         --bg #f0f4f8  | --surface #ffffff
+         * ============================================= */
+
         body {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
         }
 
         .email-container {
             max-width: 600px;
             margin: 0 auto;
             background-color: #ffffff;
+            border: 1px solid #dce3ed;
+            border-radius: 4px;
+            overflow: hidden;
         }
 
         .header {
-            background-color: #cc0000;
+            background-color: #9b1c1c;
             color: #ffffff;
             text-align: center;
-            padding: 20px;
+            padding: 28px 24px 22px;
+        }
+
+        .header-icon {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            margin: 0;
         }
 
         .content {
-            padding: 20px;
+            padding: 24px 28px 20px;
         }
 
         .alert {
-            background-color: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin-bottom: 20px;
+            background-color: #fce8e8;
+            border-left: 3px solid #9b1c1c;
+            border-radius: 0 3px 3px 0;
+            padding: 12px 16px;
+            margin-bottom: 22px;
+            font-size: 13.5px;
+            color: #3d1515;
+            line-height: 1.55;
+        }
+
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 22px;
+        }
+
+        .detail-table td {
+            padding: 9px 0;
+            border-bottom: 1px solid #eef1f5;
+            font-size: 13.5px;
+            vertical-align: top;
+            color: #3d4a5c;
+        }
+
+        .detail-table td:first-child {
+            font-weight: 600;
+            color: #1a2840;
+            width: 170px;
+            padding-right: 12px;
+        }
+
+        .detail-table tr:last-child td { border-bottom: none; }
+
+        code {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 12.5px;
+            background: #f0f4f8;
+            border: 1px solid #dce3ed;
+            border-radius: 3px;
+            padding: 1px 5px;
+            color: #1a2840;
+        }
+
+        .btn-wrap {
+            text-align: center;
+            margin: 22px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #1355d9;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 11px 28px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.1px;
         }
 
         .info-box {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-left: 4px solid #6c757d;
-            margin-top: 20px;
+            background-color: #f4f6fa;
+            border: 1px solid #dce3ed;
+            border-radius: 4px;
+            padding: 14px 18px;
+        }
+
+        .info-box-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #1a2840;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .info-box li {
+            font-size: 13px;
+            color: #3d4a5c;
+            padding: 3px 0 3px 16px;
+            position: relative;
+        }
+
+        .info-box li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #1355d9;
+            font-size: 11px;
+            top: 5px;
         }
 
         .footer {
-            background-color: #f8f9fa;
+            background-color: #f8f9fb;
+            border-top: 1px solid #eef1f5;
             text-align: center;
-            padding: 15px;
-            font-size: 12px;
-            color: #6c757d;
+            padding: 13px 20px;
+            font-size: 11.5px;
+            color: #8a9bb0;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -58,88 +165,80 @@
 <body>
 
     <!-- WRAPPER (Outlook safe) -->
-    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0"
+           style="background-color:#f0f4f8; padding: 24px 16px 40px;">
         <tr>
             <td align="center">
 
                 <div class="email-container">
 
+                    <!-- Logo ISA -->
+                    <div style="background:#ffffff; padding:14px 24px; border-bottom:1px solid #dce3ed;">
+                        <img src="data:image/png;base64,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"
+                             alt="Instituto Socioambiental" width="148" height="40" style="display:block;">
+                    </div>
+
                     <!-- HEADER -->
                     <div class="header">
-                        <div style="font-size:22px;">⚠️</div>
-                        <div style="font-size:22px;font-weight:bold;">Falha Detectada</div>
+                        <div class="header-icon">⚠</div>
+                        <div class="header-title">Falha Detectada</div>
                     </div>
 
                     <!-- CONTENT -->
                     <div class="content">
 
-                        <!-- ALERT -->
+                        <!-- ALERTA -->
                         <div class="alert">
-                            Uma task do Ro-DOU falhou durante a execução. Verifique os detalhes abaixo:
+                            Uma task do Ro-DOU falhou durante a execução. Verifique os detalhes abaixo.
                         </div>
 
-                        <!-- DETAILS (TABELA = PARTE CRÍTICA) -->
-                        <table width="100%" cellpadding="0" cellspacing="0" border="0"
-                            style="border-collapse: collapse; margin-bottom:20px;">
+                        <!-- DETALHES -->
+                        <table class="detail-table" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td style="padding:10px 0;font-weight:bold;width:180px;">
-                                    📋 Task ID:
-                                </td>
-                                <td style="padding:10px 0;">
-                                    <code>{{ task_id }}</code>
-                                </td>
+                                <td>Task ID</td>
+                                <td><code>{{ task_id }}</code></td>
                             </tr>
                             <tr>
-                                <td style="padding:10px 0;font-weight:bold;">
-                                    📅 Data de Execução:
-                                </td>
-                                <td style="padding:10px 0;">
-                                    {{ execution_date }}
-                                </td>
+                                <td>Data de Execução</td>
+                                <td>{{ execution_date }}</td>
                             </tr>
                             <tr>
-                                <td style="padding:10px 0;font-weight:bold;">
-                                    📊 DAG Run ID:
-                                </td>
-                                <td style="padding:10px 0;">
-                                    <code>{{ dag_run_id }}</code>
-                                </td>
+                                <td>DAG Run ID</td>
+                                <td><code>{{ dag_run_id }}</code></td>
                             </tr>
                         </table>
 
                         <!-- BOTÃO -->
-                        <div style="text-align:center; margin: 25px 0;">
+                        <div class="btn-wrap">
 
                             <!--[if mso]>
-            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml"
-                href="{{ log_url }}"
-                style="height:45px;v-text-anchor:middle;width:260px;"
-                arcsize="50%" stroke="f" fillcolor="#007bff">
-                <w:anchorlock/>
-                <center style="color:#ffffff;font-family:Arial;font-size:16px;font-weight:bold;">
-                    Ver Log Completo
-                </center>
-            </v:roundrect>
-            <![endif]-->
+                            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml"
+                                href="{{ log_url }}"
+                                style="height:44px;v-text-anchor:middle;width:200px;"
+                                arcsize="50%" stroke="f" fillcolor="#1355d9">
+                                <w:anchorlock/>
+                                <center style="color:#ffffff;font-family:Arial;font-size:14px;font-weight:bold;">
+                                    Ver Log Completo
+                                </center>
+                            </v:roundrect>
+                            <![endif]-->
 
                             <![if !mso]>
-                            <a href="{{ log_url }}" target="_blank" style="display:inline-block;background-color:#007bff;color:#ffffff;
-               text-decoration:none;padding:12px 25px;border-radius:40px;
-               font-weight:bold;font-size:16px;">
-                                🔍 Ver Log Completo
+                            <a href="{{ log_url }}" target="_blank" class="btn">
+                                Ver Log Completo
                             </a>
                             <![endif]>
 
                         </div>
 
-                        <!-- INFO -->
+                        <!-- PRÓXIMOS PASSOS -->
                         <div class="info-box">
-                            <strong>ℹ️ Próximos Passos:</strong>
-                            <ul style="list-style-type:none; padding:0; margin:10px 0 0 0;">
-                                <li style="margin-bottom:8px;">Verifique o log completo</li>
-                                <li style="margin-bottom:8px;">Analise a causa do erro</li>
-                                <li style="margin-bottom:8px;">Corrija e execute novamente</li>
-                                <li>Acione a equipe se necessário</li>
+                            <div class="info-box-label">Próximos Passos</div>
+                            <ul>
+                                <li>Verifique o log completo para identificar o erro</li>
+                                <li>Analise a causa e corrija o problema</li>
+                                <li>Execute novamente a task quando estiver resolvido</li>
+                                <li>Acione a equipe técnica se necessário</li>
                             </ul>
                         </div>
 
@@ -147,8 +246,7 @@
 
                     <!-- FOOTER -->
                     <div class="footer">
-                        📧 Email automático do Apache Airflow<br>
-                        Gerado em {{ execution_date }}
+                        Email automático do Apache Airflow · Gerado em {{ execution_date }}
                     </div>
 
                 </div>
